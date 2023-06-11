@@ -16,20 +16,4 @@ CREATE TABLE user_profile(
     CONSTRAINT user_profile_email_uk UNIQUE (email),
     CONSTRAINT user_profile_phone_uk UNIQUE (phone),
     CONSTRAINT user_profile_username_uk UNIQUE (username)
-)
-select
-    up.created,
-    up.created_by,
-    up.email,
-    up.first_name,
-    up."id",
-    up.last_name,
-    up."password",
-    up.phone,
-    up.updated,
-    up.updated_by,
-    up.username
-from
-    user_profile up;
-
-truncate table user_profile;
+);
