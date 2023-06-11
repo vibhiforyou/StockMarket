@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="StockMarket.StockMarket" target="17" />
+      <module name="StockMarket.StockMarket.main" target="17" />
+      <module name="StockMarket.StockMarket.test" target="17" />
+      <module name="UserAccount" target="17" />
+      <module name="UserAccount.main" target="17" />
+      <module name="UserAccount.test" target="17" />
+      <module name="UserProfile.main" target="17" />
+      <module name="UserProfile.test" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
