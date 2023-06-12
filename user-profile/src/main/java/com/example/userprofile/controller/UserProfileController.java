@@ -1,9 +1,9 @@
 package com.example.userprofile.controller;
 
+import com.example.userprofile.exception.BadRequestException;
 import com.example.userprofile.model.bo.UserProfile;
 import com.example.userprofile.model.dto.UserProfileDTO;
 import com.example.userprofile.service.UserProfileService;
-import com.example.userprofile.validation.SecondaryValidation;
 import com.example.userprofile.validation.impl.SecondaryCheckProcessing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,20 +38,24 @@ public class UserProfileController {
 
     @PostMapping
     public ResponseEntity<String> saveUserProfile(@RequestBody UserProfileDTO userProfileDTO) {
-        if (!checkPrimaryValidation(userProfileDTO)) return ResponseEntity.badRequest().body("email/phone invalid");
+        if (!checkEmailValidation(userProfileDTO)) throw new BadRequestException("invalid email format");
+        if (!checkPhoneValidation(userProfileDTO)) throw new BadRequestException("invalid phone number format");
+
         String response = checkSecondaryValidation(userProfileDTO);
-        if (response != null) return ResponseEntity.badRequest().body(response);
+        if (response != null) throw new BadRequestException(response);
+
         userProfileService.saveUserProfile(userProfileDTO);
         return ResponseEntity.ok("user saved ");
     }
 
-    private Boolean checkPrimaryValidation(UserProfileDTO userProfileDTO) {
+    private Boolean checkEmailValidation(UserProfileDTO userProfileDTO) {
         String emailPattern = "(([a-zA-Z0-9]+)([\\.\\-_]?)([a-zA-Z0-9]+)([\\.\\-_]?)([a-zA-Z0-9]+)?)(@)([a-zA-Z]+.[A-Za-z]+\\.?([a-zA-Z0-9]+)\\.?([a-zA-Z0-9]+))";
-        boolean emailValidation = Pattern.compile(emailPattern).matcher(userProfileDTO.email()).matches();
+        return Pattern.compile(emailPattern).matcher(userProfileDTO.email()).matches();
+    }
 
+    private Boolean checkPhoneValidation(UserProfileDTO userProfileDTO) {
         String phonePattern = "^\\d{10}";
-        boolean phoneValidation = Pattern.compile(phonePattern).matcher(userProfileDTO.phone()).matches();
-        return emailValidation && phoneValidation;
+        return Pattern.compile(phonePattern).matcher(userProfileDTO.phone()).matches();
     }
 
     private String checkSecondaryValidation(UserProfileDTO userProfileDTO) {
